@@ -1,0 +1,17 @@
+spring:
+    application:
+        name: eureka-server
+eureka:
+    client:
+        # 是否向服务注册中心注册自己：false:不作为一个客户端注册到注册中心
+        register-with-eureka: false
+        # 是否检索服务
+        fetch-registry: false #为true时，可以启动，但报异常：Cannot execute request on any known server
+        # 服务注册中心的配置内容，指定服务注册中心的位置
+        service-url:
+            defaultZone: http://localhost:8888/eureka/
+    #关闭eureka的自我保护，生产需要，防止网络连接导致的服务无法显示而默认显示持续90秒
+    server:
+        enable-self-preservation: false
+server:
+    port: 8888

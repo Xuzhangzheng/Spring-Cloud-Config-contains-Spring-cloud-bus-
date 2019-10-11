@@ -1,0 +1,57 @@
+# 以下配置必须在bootstrap.properties或bootstrap.yml命名的文件中
+# 原因：之所以不在application.yml中配置，spring boot会优先加载bootstrap.yml，不然上下文中无法读取到配置而报错。
+spring:
+  bus:
+    # 是否开启跟踪总线事件：默认false关闭
+    trace:
+      enabled: true
+  # 当前应用名称，在请求配置中心服务config-server时，会使用该配置名称application.name作为查找配置文件名的依据
+  application:
+    name: application
+  cloud:
+    config:
+      # git仓库指定分支[label]下，
+      # |-若无后缀名为profile对应的文件名的话，会找application.name.properties对应的文件作为配置文件进行加载
+      # |-若有后缀名为profile对应的文件名的话，会找application.name-profile.properties对应的文件作为配置文件进行加载
+      # 示例：当前配置会找jkweb-test.properties名字的文件
+      # 文件名访问规则：/{application.name}/{spring.cloud.config.profile}/{spring.cloud.config.label}
+      profile: dev
+      # 查找配置文件前，会进入指定分支[label]进行查找，若分支不存在，则无法正常获取配置，系统在加载@Value注解对应的变量时会报错
+      label:
+      # spring-cloud-config-server服务地址
+      # 使用注册中心后，可不用写死配置中心地址
+      #uri: http://localhost:8088/
+      # 使用注册中心服务发现
+      discovery:
+        # 表示开启通过服务名来访问config-server配置中心
+        enabled: true
+        # 配置中心application.name名称
+        service-id: config-server-bus
+      # 失败快速响应-预先访问配置中心：若连接不上则启动直接报错
+      fail-fast: true
+      # 连接配置中心失败时重试
+      retry:
+        # 配置重试次数，默认为6
+        max-attempts: 8
+        # 间隔乘数，默认1.1
+        multiplier: 1.1
+        # 初始重试间隔时间，默认1000ms
+        initial-interval: 1000
+        # 最大间隔时间，默认2000ms
+        max-interval: 2000
+# spring boot 2.0之前：需要用到该配置忽略权限拦截限制，不然无法使用/refresh
+management:
+  # 关闭权限拦截
+  #security:
+  #  enabled: false
+  # 但是在2.X中，是不存在/refresh该路径的，需要我们自行配置
+  endpoints:
+    web:
+      exposure:
+        include: refresh,health,info
+
+# 注册中心配置
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8888/eureka/

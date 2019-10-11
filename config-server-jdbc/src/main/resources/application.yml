@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: config-server-jdbc
+  # 若使用jdbc作为存储配置文件的容器，则配置中心服务需要修改profiles.active为jdbc，不然仍然会默认加载git配置
+  profiles:
+    active: jdbc
+  cloud:
+    config:
+      server:
+        jdbc:
+          # 设置查询配置的SQL语句
+          # 默认为：SELECT `KEY`, `VALUE` from PROPERTIES where APPLICATION=? and PROFILE=? and LABEL=?
+          # 具体可看文件JdbcEnvironmentProperties.java
+          #
+          sql: select sys_key as 'KEY', sys_value as 'VALUE' from sys_data_dictionary where type = ? and creator = ? and bank_value = ?
+  # 数据库配置
+  datasource:
+    url:
+    username:
+    password:
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+# 注册中心
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8888/eureka/
+server:
+  port: 8068

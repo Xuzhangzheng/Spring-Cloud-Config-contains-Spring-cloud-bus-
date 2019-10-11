@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: config-server
+  cloud:
+    config:
+      server:
+        git:
+          # git 仓库地址：
+          uri:
+          # git 帐号
+          username:
+          # git 密码
+          password:
+          # 配置文件存储路径
+          search-paths: config
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8888/eureka/
+server:
+  port: 8088
+
+

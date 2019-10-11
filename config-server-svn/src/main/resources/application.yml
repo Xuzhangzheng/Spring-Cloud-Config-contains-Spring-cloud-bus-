@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: config-server-svn
+  # 若使用svn作为存储配置文件的容器，则配置中心服务需要修改profiles.active为subversion，不然仍然会默认加载git配置
+  profiles:
+    active: subversion
+  cloud:
+    config:
+      server:
+        svn:
+          # svn 地址
+          uri:
+          # svn 账户
+          username:
+          # svn 密码
+          password:
+          #
+          default-label:
+          #
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8888/eureka/
+server:
+  port: 8078

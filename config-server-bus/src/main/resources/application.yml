@@ -1,0 +1,46 @@
+spring:
+  # rabbitMq
+  rabbitmq:
+    host: 192.168.232.143
+    port: 5672
+    username: jkjf
+    password: 123456
+    virtual-host: /
+  bus:
+    # 是否开启跟踪总线事件：默认false关闭
+    trace:
+      enabled: true
+  application:
+    name: config-server-bus
+  # 若使用svn作为存储配置文件的容器，则配置中心服务需要修改profiles.active为subversion，不然仍然会默认加载git配置
+  profiles:
+    active: subversion
+  cloud:
+    config:
+      server:
+        svn:
+          # svn 地址
+          uri:
+          # svn 账户
+          username:
+          # svn 密码
+          password:
+          #
+          default-label:
+          #
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8888/eureka/
+# spring boot 2.0之前：需要用到该配置忽略权限拦截限制，不然无法使用/refresh
+management:
+  # 关闭权限拦截
+  #security:
+  #  enabled: false
+  # 但是在2.X中，是不存在/refresh该路径的，需要我们自行配置
+  endpoints:
+    web:
+      exposure:
+        include: bus-refresh,refresh,health,info
+server:
+  port: 8058
